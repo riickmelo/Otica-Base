@@ -9,18 +9,19 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pacote.DBConnection;
+import pacote.janelas.beans.ProdutoBean;
 
 /**
  *
  * @author henri
  */
 public class CadProd extends javax.swing.JInternalFrame {
-    int lastId = 0;
-    int nextId = 0;
+
     DBConnection dbCnx;
     Connection cnx;
     ResultSet rs;
-    
+    ProdutoBean produtoObj;
+
     /**
      * Creates new form CadProd
      */
@@ -29,14 +30,14 @@ public class CadProd extends javax.swing.JInternalFrame {
         initComponents();
     }
 
-        public void  runQuery(String sql) throws SQLException{
-            cnx = dbCnx.openConnection();
-            Statement st = null;
-            st = cnx.createStatement();
-            st.executeUpdate(sql);
-            cnx.close();
+    public void runQuery(String sql) throws SQLException {
+        cnx = dbCnx.openConnection();
+        Statement st = null;
+        st = cnx.createStatement();
+        st.executeUpdate(sql);
+        cnx.close();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -126,16 +127,26 @@ public class CadProd extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
-        try {
-            runQuery("INSERT INTO produtos (tipo, nome, descricao) VALUES("
-                    + jcbTipoProduto.getSelectedIndex()  +",'"
-                    + jtfNome.getText() + "','"
-                    + jtaDescrição.getText() + "')");
-        } catch (SQLException ex) {
-            Logger.getLogger(CadProd.class.getName()).log(Level.SEVERE, null, ex);
+        if (preencherObj() == true) {
+            try {
+                runQuery("INSERT INTO produtos (tipo, nome, descricao) VALUES("
+                        + produtoObj.getTipo() + ",'"
+                        + produtoObj.getNome() + "','"
+                        + produtoObj.getDescricao() + "')");
+            } catch (SQLException ex) {
+                Logger.getLogger(CadProd.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jbCadastrarActionPerformed
 
+    public boolean preencherObj() {
+        produtoObj = new ProdutoBean();
+        produtoObj.setTipo(jcbTipoProduto.getSelectedIndex());
+        produtoObj.setNome(jtfNome.getText());
+        produtoObj.setDescricao(jtaDescrição.getText());
+
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

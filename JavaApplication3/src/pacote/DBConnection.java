@@ -44,6 +44,7 @@ public class DBConnection {
         if(conn != null){
             try {
                 conn.close();
+                System.out.println("Conexão Fechada");
             } catch (SQLException ex) {
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -55,6 +56,7 @@ public class DBConnection {
         if(stat != null){
             try {
                 stat.close();
+                System.out.println("Conexão Fechada");
             } catch (SQLException ex) {
                 Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -66,6 +68,7 @@ public class DBConnection {
         if(rs != null){
             try {
                 rs.close();
+                System.out.println("Conexão Fechada");
             } catch (SQLException ex) {
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }

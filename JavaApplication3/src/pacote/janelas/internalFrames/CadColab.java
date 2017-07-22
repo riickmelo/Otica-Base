@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pacote.DBConnection;
+import pacote.janelas.beans.ColaboradorBean;
 
 /**
  *
@@ -19,6 +20,7 @@ public class CadColab extends javax.swing.JInternalFrame {
     DBConnection dbCnx;
     Connection cnx;
     ResultSet rs;
+    ColaboradorBean colaboradorObj;
     
     /**
      * Creates new form CadColab
@@ -28,10 +30,11 @@ public class CadColab extends javax.swing.JInternalFrame {
         cnx = dbCnx.openConnection();
     }
 
-        public void  runQuery(String sql) throws SQLException{
+    public void  runQuery(String sql) throws SQLException{
         Statement st = null;
         st = cnx.createStatement();
         st.executeUpdate(sql);
+        cnx.close();
     }
     
     /**
@@ -147,6 +150,9 @@ public class CadColab extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
+        if(PreencherObj() == true){
+            
+        }
         try {
             runQuery("INSERT INTO colaboradores VALUES ('"
                     + jtfNome.getText() + "','"
@@ -159,6 +165,17 @@ public class CadColab extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jbCadastrarActionPerformed
 
+    public boolean PreencherObj(){
+    colaboradorObj =  new ColaboradorBean();
+    
+    colaboradorObj.setNome(jtfNome.getText());
+    colaboradorObj.setNvAcesso(jcbTipoColaborador.getSelectedIndex());
+    colaboradorObj.setSenha(jtfsenha.getText());
+    colaboradorObj.setTelefone(jtfTelefone.getText());
+    colaboradorObj.setLogin(Integer.parseInt(jtfLogin.getText()));
+    return true;
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbCadastrar;

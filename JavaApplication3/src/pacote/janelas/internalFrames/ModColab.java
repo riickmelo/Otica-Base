@@ -5,17 +5,35 @@
  */
 package pacote.janelas.internalFrames;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import pacote.DBConnection;
+import pacote.janelas.beans.ColaboradorBean;
+
 /**
  *
  * @author henri
  */
 public class ModColab extends javax.swing.JInternalFrame {
-
-    /**
-     * Creates new form ModColab
-     */
+    
+    DBConnection dbCnx;
+    Connection cnx;
+    List<ColaboradorBean> colabList = new ArrayList<>();
+    
     public ModColab() {
         initComponents();
+        DefaultTableModel modelo =  (DefaultTableModel) jTableColab.getModel();
+        jTableColab.setRowSorter(new TableRowSorter(modelo));
+        readJTable();
+        DBConnection.closeConnection(cnx);
     }
 
     /**
@@ -28,15 +46,14 @@ public class ModColab extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableColab = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        setClosable(true);
+
+        jTableColab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Login", "Senha", "Nome", "Telefone", "Nivel de Acesso"
@@ -50,7 +67,7 @@ public class ModColab extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableColab);
 
         jButton1.setText("Modifficar");
 
@@ -70,20 +87,55 @@ public class ModColab extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-
+    
+    public List<ColaboradorBean> read(){
+        cnx = DBConnection.openConnection();
+        PreparedStatement st = null;
+        ResultSet rset =  null;
+        try {
+            st = cnx.prepareStatement("SELECT * FROM colaboradores");
+            rset = st.executeQuery();
+            while (rset.next()){
+                ColaboradorBean colabObj  = new ColaboradorBean();
+                colabObj.setNome(rset.getString(1));
+                colabObj.setTelefone(rset.getString(2));
+                colabObj.setNvAcesso(rset.getInt(3));
+                colabObj.setSenha(rset.getString(4));
+                colabObj.setLogin(rset.getInt(5));
+                colabList.add(colabObj);
+            }   
+            st.close();
+            rset.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ModColab.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return colabList;
+    }
+    public void readJTable(){
+        DefaultTableModel modelo =  (DefaultTableModel) jTableColab.getModel();
+        
+        for(ColaboradorBean c: read()){
+            modelo.addRow(new Object[]{
+                c.getLogin(),
+                c.getSenha(),
+                c.getNome(),
+                c.getTelefone(),
+                c.getNvAcesso()
+            });
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableColab;
     // End of variables declaration//GEN-END:variables
 }
