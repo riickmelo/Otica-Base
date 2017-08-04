@@ -9,10 +9,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import pacote.DBConnection;
@@ -24,16 +26,18 @@ import pacote.janelas.beans.ColaboradorBean;
  */
 public class ModColab extends javax.swing.JInternalFrame {
     
+    List<ColaboradorBean> colabList = new ArrayList<>();
+    PreparedStatement stm;
+    ResultSet rs;
     DBConnection dbCnx;
     Connection cnx;
-    List<ColaboradorBean> colabList = new ArrayList<>();
+    int loginSeach;
     
     public ModColab() {
         initComponents();
         DefaultTableModel modelo =  (DefaultTableModel) jTableColab.getModel();
         jTableColab.setRowSorter(new TableRowSorter(modelo));
         readJTable();
-        DBConnection.closeConnection(cnx);
     }
 
     /**
@@ -47,7 +51,12 @@ public class ModColab extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableColab = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jbModificar = new javax.swing.JButton();
+        jtfLogin = new javax.swing.JTextField();
+        jtfSenha = new javax.swing.JTextField();
+        jtfNome = new javax.swing.JTextField();
+        jtfNumero = new javax.swing.JTextField();
+        jcbNvAcesso = new javax.swing.JComboBox<>();
 
         setClosable(true);
 
@@ -67,9 +76,24 @@ public class ModColab extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableColab.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableColabMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableColab);
 
-        jButton1.setText("Modifficar");
+        jbModificar.setText("Modifficar");
+
+        jtfLogin.setText("Login");
+
+        jtfSenha.setText("Senha");
+
+        jtfNome.setText("Nome");
+
+        jtfNumero.setText("Telefone");
+
+        jcbNvAcesso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,7 +104,18 @@ public class ModColab extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbModificar)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jtfNumero, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                                    .addComponent(jtfLogin, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jtfSenha)
+                                    .addComponent(jcbNvAcesso, 0, 135, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jtfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -89,37 +124,110 @@ public class ModColab extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbNvAcesso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jbModificar)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    //Called event when mouse is clickled
+    private void jTableColabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableColabMouseClicked
+        int selectRow =  jTableColab.getSelectedRow();
+        loginSeach = (int)jTableColab.getValueAt(selectRow, 0);
+        if(selectRow == -1){
+            System.out.println("No Have Rows Selected");
+        }else{
+        rs = getIdSelectedRow(selectRow, (int) jTableColab.getValueAt(selectRow, 0));
+        SetComponents(rs);
+        }
+    }//GEN-LAST:event_jTableColabMouseClicked
+        
+    //get the id selected in JTable
+    public ResultSet getIdSelectedRow(int row, int loginSeach ){
+     stm =  null;
+     rs =  null;
+     String sql = "SELECT * FROM colaboradores WHERE login = " + loginSeach;
+     cnx = DBConnection.openConnection();
+        try {
+            stm = cnx.prepareStatement(sql);
+            rs = stm.executeQuery();
+            return rs;
+        } catch (SQLException ex) {
+            Logger.getLogger(ModColab.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showConfirmDialog(rootPane, "Erro para capturar ID: ");
+        }
+        return null;
+    }
+    
+    //set values in DataBase in InternalFrame Components
+    public void SetComponents (ResultSet rs){
+        int nvAcesso;
+        try {
+            if(rs.next() ==  true){
+                jtfNome.setText(rs.getString(1));
+                jtfNumero.setText(rs.getString(2));
+                //condicional de nivel de acesso
+                nvAcesso = rs.getInt(3);
+                switch (nvAcesso) {
+                    case 1:
+                        jcbNvAcesso.setSelectedIndex(1);
+                        break;
+                    case 2:
+                        jcbNvAcesso.setSelectedIndex(2);
+                        break;
+                    case 3:
+                        jcbNvAcesso.setSelectedIndex(3);
+                        break;
+                    case 4:
+                        jcbNvAcesso.setSelectedIndex(4);
+                        break;
+                }
+                jtfSenha.setText(rs.getString(4));
+                jtfLogin.setText(rs.getInt(5)+"");
+                
+                DBConnection.closeConnection(cnx,stm, rs);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ModColab.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    //get components in Database and store in List<>
     public List<ColaboradorBean> read(){
         cnx = DBConnection.openConnection();
-        PreparedStatement st = null;
-        ResultSet rset =  null;
+        stm = null;
+        rs =  null;
         try {
-            st = cnx.prepareStatement("SELECT * FROM colaboradores");
-            rset = st.executeQuery();
-            while (rset.next()){
+            stm = cnx.prepareStatement("SELECT * FROM colaboradores");
+            rs = stm.executeQuery();
+            while (rs.next()){
                 ColaboradorBean colabObj  = new ColaboradorBean();
-                colabObj.setNome(rset.getString(1));
-                colabObj.setTelefone(rset.getString(2));
-                colabObj.setNvAcesso(rset.getInt(3));
-                colabObj.setSenha(rset.getString(4));
-                colabObj.setLogin(rset.getInt(5));
+                colabObj.setNome(rs.getString(1));
+                colabObj.setTelefone(rs.getString(2));
+                colabObj.setNvAcesso(rs.getInt(3));
+                colabObj.setSenha(rs.getString(4));
+                colabObj.setLogin(rs.getString(5));
                 colabList.add(colabObj);
             }   
-            st.close();
-            rset.close();
         } catch (SQLException ex) {
             Logger.getLogger(ModColab.class.getName()).log(Level.SEVERE, null, ex);
         }
         return colabList;
     }
+    // method insert components in DataBase to JTable
     public void readJTable(){
         DefaultTableModel modelo =  (DefaultTableModel) jTableColab.getModel();
         
@@ -134,8 +242,13 @@ public class ModColab extends javax.swing.JInternalFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableColab;
+    private javax.swing.JButton jbModificar;
+    private javax.swing.JComboBox<String> jcbNvAcesso;
+    private javax.swing.JTextField jtfLogin;
+    private javax.swing.JTextField jtfNome;
+    private javax.swing.JTextField jtfNumero;
+    private javax.swing.JTextField jtfSenha;
     // End of variables declaration//GEN-END:variables
 }

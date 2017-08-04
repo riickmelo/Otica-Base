@@ -63,6 +63,9 @@ public class Admin extends javax.swing.JFrame {
         jMenu2.setText("jMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(6);
+
+        desktopPanel.setBackground(new java.awt.Color(255, 102, 102));
 
         javax.swing.GroupLayout desktopPanelLayout = new javax.swing.GroupLayout(desktopPanel);
         desktopPanel.setLayout(desktopPanelLayout);
@@ -168,7 +171,8 @@ public class Admin extends javax.swing.JFrame {
             .addComponent(desktopPanel)
         );
 
-        pack();
+        setSize(new java.awt.Dimension(603, 339));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     //clique cadastro produto
     private void jmCadProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCadProdActionPerformed

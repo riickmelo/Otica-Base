@@ -33,58 +33,91 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         btnEntrar = new javax.swing.JButton();
-        jtLogin = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jpPassword = new javax.swing.JPasswordField();
+        jtLogin = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
+        setBackground(new java.awt.Color(0, 153, 204));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMinimumSize(new java.awt.Dimension(720, 360));
+        setName("login"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(720, 360));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnEntrar.setBackground(new java.awt.Color(0, 204, 204));
+        btnEntrar.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
+        btnEntrar.setForeground(new java.awt.Color(255, 255, 255));
         btnEntrar.setText("Entrar");
+        btnEntrar.setBorder(null);
+        btnEntrar.setBorderPainted(false);
+        btnEntrar.setSelected(true);
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEntrarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 240, 230, 60));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Login");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Semilight", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Senha");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, -1, -1));
+
+        jpPassword.setBackground(new java.awt.Color(0, 153, 204));
+        jpPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jpPassword.setBorder(null);
+        getContentPane().add(jpPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 210, 31));
+
+        jtLogin.setBackground(new java.awt.Color(0, 153, 204));
+        jtLogin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jtLogin.setForeground(new java.awt.Color(255, 255, 255));
         jtLogin.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtLogin.setBorder(null);
         jtLogin.setMaximumSize(new java.awt.Dimension(115, 30));
         jtLogin.setMinimumSize(new java.awt.Dimension(115, 30));
         jtLogin.setPreferredSize(new java.awt.Dimension(115, 30));
+        getContentPane().add(jtLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 210, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 209, 10));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 102, 209, 10));
 
-        jpPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel1.setBackground(new java.awt.Color(0, 153, 204));
+        jPanel1.setPreferredSize(new java.awt.Dimension(720, 345));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(144, 144, 144)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEntrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpPassword))
-                .addContainerGap(141, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 720, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(jtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jpPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(btnEntrar)
-                .addContainerGap(96, Short.MAX_VALUE))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 340, Short.MAX_VALUE)
         );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 340));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    //Method for play modify or selection in DataBase
     public void  runQuery(String sql) throws SQLException{
         Statement st = null;
         st = cnx.createStatement();
         st.executeUpdate(sql);
     }
-
+    
+    //
     public void CompareQuery (String login, String senha) throws SQLException{
         Statement st = null;
         st = cnx.createStatement();
@@ -96,13 +129,9 @@ public class Login extends javax.swing.JFrame {
                     System.out.println("LOGIN SUCEDIDO");
                 }else{
                     System.out.println("senha errada");
-                    System.out.println("Senha:" + rs.getString("senha") );
-                    System.out.println("SenhaInput:" + senha );
                 }
             }else{
                 System.out.println("Acesso Negado");
-                System.out.println("Login:" + rs.getString("login") );
-                System.out.println("Senha:" + rs.getString("senha") );
             }
     }
 
@@ -151,6 +180,11 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEntrar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPasswordField jpPassword;
     private javax.swing.JTextField jtLogin;
     // End of variables declaration//GEN-END:variables

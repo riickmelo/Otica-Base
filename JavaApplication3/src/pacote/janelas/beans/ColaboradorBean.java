@@ -15,12 +15,12 @@ public class ColaboradorBean {
     String telefone;
     int nvAcesso;
     String senha;
-    int login;
+    String login;
     
     public ColaboradorBean(){
     }
 
-    public ColaboradorBean(String nome,String telefone, int nvAcesso, String senha, int login){
+    public ColaboradorBean(String nome,String telefone, int nvAcesso, String senha, String login){
         this.nome =  nome;
         this.telefone = telefone;
         this.nvAcesso = nvAcesso;
@@ -61,11 +61,11 @@ public class ColaboradorBean {
         this.senha = senha;
     }
 
-    public int getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(int login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 }

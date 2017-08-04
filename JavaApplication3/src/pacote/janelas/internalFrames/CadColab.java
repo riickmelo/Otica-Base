@@ -16,12 +16,12 @@ import pacote.janelas.beans.ColaboradorBean;
  * @author henri
  */
 public class CadColab extends javax.swing.JInternalFrame {
-    
+
     DBConnection dbCnx;
     Connection cnx;
     ResultSet rs;
     ColaboradorBean colaboradorObj;
-    
+
     /**
      * Creates new form CadColab
      */
@@ -30,13 +30,15 @@ public class CadColab extends javax.swing.JInternalFrame {
         cnx = dbCnx.openConnection();
     }
 
-    public void  runQuery(String sql) throws SQLException{
+    //Metodo criado pra receber um comando query (banco de dados) e executar sem arquivalo
+    //Utilizado para cadastros.
+    public void runQuery(String sql) throws SQLException {
         Statement st = null;
         st = cnx.createStatement();
         st.executeUpdate(sql);
         cnx.close();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,7 +61,11 @@ public class CadColab extends javax.swing.JInternalFrame {
         jbCadastrar = new javax.swing.JButton();
 
         setClosable(true);
+        setForeground(java.awt.Color.darkGray);
+        setIconifiable(true);
         setTitle("Cadastro Colaboradores");
+        setToolTipText("");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jtfNome.setText("Nome");
 
@@ -104,7 +110,7 @@ public class CadColab extends javax.swing.JInternalFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jlCodAcess, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                        .addComponent(jlCodAcess, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                         .addGap(136, 136, 136))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -127,7 +133,7 @@ public class CadColab extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jtfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jcbTipoColaborador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                         .addComponent(jlTelefone)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -150,32 +156,31 @@ public class CadColab extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
-        if(PreencherObj() == true){
-            
-        }
-        try {
-            runQuery("INSERT INTO colaboradores VALUES ('"
-                    + jtfNome.getText() + "','"
-                    + jtfTelefone.getText()+"',"
-                    + jcbTipoColaborador.getSelectedIndex() + ",'"
-                    + jtfsenha.getText() + "',"
-                    + Integer.parseInt(jtfLogin.getText()) + ")");
-        } catch (SQLException ex) {
-            Logger.getLogger(CadColab.class.getName()).log(Level.SEVERE, null, ex);
+        if (PreencherObj() == true) {
+            try {
+                runQuery("INSERT INTO colaboradores VALUES ('"
+                        + colaboradorObj.getNome() + "','"
+                        + colaboradorObj.getTelefone() + "',"
+                        + colaboradorObj.getNvAcesso() + ",'"
+                        + colaboradorObj.getSenha() + "',"
+                        + colaboradorObj.getLogin() + ")");
+            } catch (SQLException ex) {
+                Logger.getLogger(CadColab.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jbCadastrarActionPerformed
 
-    public boolean PreencherObj(){
-    colaboradorObj =  new ColaboradorBean();
-    
-    colaboradorObj.setNome(jtfNome.getText());
-    colaboradorObj.setNvAcesso(jcbTipoColaborador.getSelectedIndex());
-    colaboradorObj.setSenha(jtfsenha.getText());
-    colaboradorObj.setTelefone(jtfTelefone.getText());
-    colaboradorObj.setLogin(Integer.parseInt(jtfLogin.getText()));
-    return true;
+    //Metodo criado para passar valores de campos para o Bean da classe
+    public boolean PreencherObj() {
+        colaboradorObj = new ColaboradorBean();
+
+        colaboradorObj.setNome(jtfNome.getText());
+        colaboradorObj.setNvAcesso(jcbTipoColaborador.getSelectedIndex());
+        colaboradorObj.setSenha(jtfsenha.getText());
+        colaboradorObj.setTelefone(jtfTelefone.getText());
+        colaboradorObj.setLogin(jtfLogin.getText());
+        return true;
     }
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jbCadastrar;
